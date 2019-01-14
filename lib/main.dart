@@ -39,6 +39,8 @@ class _HomePageState extends State<homePage> {
   }
 
   String _turn = 'o';
+  int _scoreX = 0;
+  int _scoreO = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +48,15 @@ class _HomePageState extends State<homePage> {
       appBar: AppBar(
         title: Text("TicTacToe"),
       ),
-      body: Center(
-        child: Column(
+      body: Column(children: [
+        Container(
+          height: 70.0,
+          child: Text(
+            " $_scoreX : $_scoreO ",
+            style: TextStyle(fontSize: 50.0),
+          ),
+        ),
+        Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Row(
@@ -76,7 +85,12 @@ class _HomePageState extends State<homePage> {
             )
           ],
         ),
-      ),
+        Container(
+          height: 90.0,
+          alignment: Alignment(0.0, 1.0),
+          child: Text("Turn: $_turn", style: TextStyle(fontSize: 50.0)),
+        ),
+      ]),
     );
   }
 
@@ -147,8 +161,13 @@ class _HomePageState extends State<homePage> {
     String dialogText;
     if (winner == false)
       dialogText = "Draw";
-    else
+    else {
       dialogText = "$_turn won the game";
+      if (_turn == "x")
+        _scoreX++;
+      else
+        _scoreO++;
+    }
     showDialog(
         context: context,
         barrierDismissible: false, // user must tap button!
