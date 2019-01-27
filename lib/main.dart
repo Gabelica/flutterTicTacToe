@@ -54,8 +54,6 @@ class MyApp extends StatelessWidget {
     ),
     onLongPress: null,
   );
-
-
 }
 
 // keeping track of score
@@ -118,7 +116,7 @@ class _GridState extends State<Grid> {
         MediaQuery.of(context).size.height; // get size of screen
     double screenWidth = MediaQuery.of(context).size.width;
     //building a grid of buttons
-    Widget grid = Column(   
+    Widget grid = Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Row(
@@ -181,17 +179,15 @@ class _FieldState extends State<Field> {
     //needs implementation
     if (widget.state == false) {
       widget.state = true;
-      changeTurn();
       setState(() {});
     } else {
       print("vec kliknuto");
     }
   }
 
-  void resetField(){
+  void resetField() {
     widget.state = false;
-    setState(() {
-    });
+    setState(() {});
   }
 
   Widget build(BuildContext context) {
@@ -205,11 +201,20 @@ class _FieldState extends State<Field> {
         height: screenHeight * 0.22,
         margin: EdgeInsets.all(0.0),
         child: FlatButton.icon(
-          icon: widget.state == false
-              ? (Icon(Icons.not_interested))
-              : (Icon(Icons.add)),
-          label: Text(" "),
+          icon:
+              widget.state == false ? (Icon(Icons.not_interested)) : setIcon(),
+          label: Text(""),
           onPressed: _handleTap,
         ));
+  }
+
+  Widget setIcon() {
+    if (turn == "o") {
+      changeTurn();
+      return Icon(Icons.panorama_fish_eye);
+    } else {
+      changeTurn();
+      return Icon(Icons.add);
+    }
   }
 }
