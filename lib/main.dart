@@ -7,7 +7,7 @@ on tap change icon
 */
 
 void main() => runApp(MyApp());
-var turn = "+";
+var turn = "o";
 void changeTurn() {
   turn == "+" ? turn = "o" : turn = "+";
 }
@@ -28,18 +28,22 @@ class MyApp extends StatelessWidget {
         ));
   }
 
-//show score widget
-  Widget scoreSection = Container(
-    child: new Score(),
-  );
+//basic layout of the game
+  final Widget scoreSection = new Score();
 
-  Widget gridSection = Container(
-    child: new Grid(),
-  );
+  final Widget gridSection = new Grid();
 
-//show turn widget
-  Widget turnSection = GestureDetector(
-    child: Container(
+  final Widget turnSection = new TurnWidget();
+}
+
+class TurnWidget extends StatefulWidget {
+  @override
+  _TurnWidgetState createState() => _TurnWidgetState();
+}
+
+class _TurnWidgetState extends State<TurnWidget> {
+  Widget build(BuildContext context) {
+    return Container(
       height: 70.0,
       decoration: BoxDecoration(
         border: Border.all(
@@ -47,19 +51,18 @@ class MyApp extends StatelessWidget {
             width: 5.0), //suround score with theme style border
       ),
       child: Text(
-        "Turn : $turn",
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50.0),
+        "Turn: $turn",
+        style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold),
       ),
       alignment: Alignment(0.0, 0.0), // align to center of container
-    ),
-    onLongPress: null,
-  );
+    );
+  }
 }
 
 // keeping track of score
 class Score extends StatefulWidget {
-  int scoreX;
-  int scoreO;
+  int scoreX = 0;
+  int scoreO = 0;
 
   @override
   _ScoreState createState() => _ScoreState();
@@ -85,9 +88,6 @@ class _ScoreState extends State<Score> {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight =
-        MediaQuery.of(context).size.height; // get size of screen
-    double screenWidth = MediaQuery.of(context).size.width;
     resetScore();
     return Container(
       height: 70.0,
@@ -161,12 +161,14 @@ class _GridState extends State<Grid> {
 
 class Field extends StatefulWidget {
   int x, y;
+  String player;
   bool state;
 
   Field(int x, int y) {
     this.x = x;
     this.y = y;
     this.state = false; //not clicked
+    this.player = "";
   }
   @override
   State<StatefulWidget> createState() {
@@ -176,17 +178,20 @@ class Field extends StatefulWidget {
 
 class _FieldState extends State<Field> {
   void _handleTap() {
-    //needs implementation
     if (widget.state == false) {
       widget.state = true;
+      widget.player = turn;
+      changeTurn();
       setState(() {});
+      
     } else {
-      print("vec kliknuto");
+      print("filled");
     }
   }
 
   void resetField() {
     widget.state = false;
+    widget.player = "";
     setState(() {});
   }
 
@@ -200,20 +205,23 @@ class _FieldState extends State<Field> {
         width: screenWidth * 0.32,
         height: screenHeight * 0.22,
         margin: EdgeInsets.all(0.0),
-        child: FlatButton.icon(
-          icon:
+        child: FlatButton(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
               widget.state == false ? (Icon(Icons.not_interested)) : setIcon(),
-          label: Text(""),
+              //Text("mis")
+            ],
+          ),
           onPressed: _handleTap,
         ));
   }
 
   Widget setIcon() {
     if (turn == "o") {
-      changeTurn();
       return Icon(Icons.panorama_fish_eye);
     } else {
-      changeTurn();
       return Icon(Icons.add);
     }
   }
