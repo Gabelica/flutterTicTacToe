@@ -39,10 +39,10 @@ class _GameSettingsState extends State<GameSettings> {
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
                   ),
-                  Switch(
-                      value: false,
-                      activeColor: Colors.orange,
-                      inactiveThumbColor: Colors.grey,
+                  Checkbox(
+                      value: playWithComp,
+                      //activeColor: Colors.black12,
+                      checkColor: Colors.orange,
                       onChanged: (bool value) {
                         setState(() {
                           playWithComp = !playWithComp;
